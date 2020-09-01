@@ -1,3 +1,5 @@
+require 'pry'
+
 class Board
     attr_accessor :board
 
@@ -15,9 +17,90 @@ class Board
 
             cons4 = @board[i].each_cons(4).to_a
 
-            for arr in cons4
-                return true if arr[0] != " " && arr.all? {|a| a == arr[0]}
+            for row in cons4
+                return row[0] if row[0] != " " && row.all? {|a| a == row[0]}
             end
+        end
+
+        false
+    end
+
+    def vertical_win?
+        for i in 0..@board[0].length-1
+
+            # Check whether all of the consecutive 4 vertical elements is equal to each other and are not empty
+            
+            count1 = 0
+            count2 = 0
+
+            previous = nil
+
+            for j in 0..@board.length-1
+                if @board[j][i] != " "
+                    if previous == nil || previous != @board[j][i]
+                        previous = @board[j][i]
+
+                        count1 = 0
+                        count2 = 0
+
+                        count1 += 1 if previous == @player1
+                        count2 += 1 if previous == @player2
+                        next
+                    end
+
+                    if previous == @player1
+                        @board[j][i] == previous ? count1 += 1 : count1 = 0
+                    elsif previous == @player2
+                        @board[j][i] == previous ? count2 += 1 : count2 = 0
+                    end
+
+                    if count1 >= 4
+                        return @player1
+                    elsif count2 >= 4
+                        return @player2
+                    end
+                end
+            end
+        end
+
+        false
+    end
+
+    def diagonal_win?
+        '''
+        Check whether all of the consecutive 4 diagonal elements is equal to each other and are not empty
+        
+        Starting points for diagonal lines that start from top left:
+        [0,0] [1,0] [2,0] DONE
+        [0,1] [1,1] [2,1] DONE
+        [0,2] [1,2] [2,2]
+        [0,3] [1,3] [2,3]
+
+        Starting points for diagonal lines that start from bottom left:
+        [3,0] [4,0] [5,0] [5,1] [5,2] [5,3]
+        '''
+
+        start_points = [
+            [0,0], [1,0], [2,0],
+            [0,1], [1,1], [2,1],
+            [0,2], [1,2], [2,2],
+            [0,3], [1,3], [2,3]
+        ]
+
+        for arr in start_points
+            cons4 = []
+
+            y, x = arr
+            max_y = y + 4
+            max_x = x + 4
+
+            until y == max_y && x == max_x
+                cons4 << @board[y][x]
+                y += 1
+                x += 1
+            end
+
+            return cons4[0] if cons4[0] != " " && cons4.all? {|a| a == cons4[0]}
         end
 
         false
