@@ -1,5 +1,3 @@
-require 'pry'
-
 class Board
     attr_accessor :board
 
@@ -71,23 +69,26 @@ class Board
         Check whether all of the consecutive 4 diagonal elements is equal to each other and are not empty
         
         Starting points for diagonal lines that start from top left:
-        [0,0] [1,0] [2,0] DONE
-        [0,1] [1,1] [2,1] DONE
+        [0,0] [1,0] [2,0]
+        [0,1] [1,1] [2,1] 
         [0,2] [1,2] [2,2]
         [0,3] [1,3] [2,3]
 
         Starting points for diagonal lines that start from bottom left:
-        [3,0] [4,0] [5,0] [5,1] [5,2] [5,3]
+        [5,0], [4,0], [3,0]
+        [5,1], [4,1], [3,1]
+        [5,2], [4,2], [3,2]
+        [5,3], [4,3], [3,3]
         '''
 
-        start_points = [
+        top_left_start_points = [
             [0,0], [1,0], [2,0],
             [0,1], [1,1], [2,1],
             [0,2], [1,2], [2,2],
             [0,3], [1,3], [2,3]
         ]
 
-        for arr in start_points
+        for arr in top_left_start_points
             cons4 = []
 
             y, x = arr
@@ -96,10 +97,39 @@ class Board
 
             until y == max_y && x == max_x
                 cons4 << @board[y][x]
+
+                # go down diagonally in every move until it reaches bottom left
                 y += 1
                 x += 1
             end
 
+            # return the first content if every element inside the array is the same
+            return cons4[0] if cons4[0] != " " && cons4.all? {|a| a == cons4[0]}
+        end
+
+        btm_left_start_points = [
+            [5,0], [4,0], [3,0],
+            [5,1], [4,1], [3,1],
+            [5,2], [4,2], [3,2],
+            [5,3], [4,3], [3,3]
+        ]
+
+        for arr in btm_left_start_points
+            cons4 = []
+
+            y, x = arr
+            max_y = y - 4
+            max_x = x + 4
+
+            until y == max_y && x == max_x
+                cons4 << @board[y][x]
+
+                # go up diagonally in every move until it reaches top right
+                y -= 1
+                x += 1
+            end
+
+            # return the first content if every element inside the array is the same
             return cons4[0] if cons4[0] != " " && cons4.all? {|a| a == cons4[0]}
         end
 

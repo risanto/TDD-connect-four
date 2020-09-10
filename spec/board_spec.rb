@@ -11,7 +11,7 @@ describe Board do
     end
     
     describe "#horizontal_win?" do
-        it "returns `winner` if 4 player pieces connect horizontally (XOOOOXX)" do
+        it "returns O if 4 player pieces connect horizontally (XOOOOXX)" do
             game = Board.new('O', 'X')
             board = game.board
             board[rand(0..5)] = ['X', 'O', 'O', 'O', 'O', 'X', 'X']
@@ -19,7 +19,7 @@ describe Board do
             expect(game.horizontal_win?).to eql('O')
         end
 
-        it "returns `winner` if 4 player pieces connect horizontally (XOOXXXX)" do
+        it "returns X if 4 player pieces connect horizontally (XOOXXXX)" do
             game = Board.new('O', 'X')
             board = game.board
             board[rand(0..5)] = ['X', 'O', 'O', 'X', 'X', 'X', 'X']
@@ -37,7 +37,7 @@ describe Board do
     end
 
     describe "#vertical_win?" do
-        it "returns `winner` if 4 player pieces connect vertically (OOOOXO)" do
+        it "returns O if 4 player pieces connect vertically (OOOOXO)" do
             game = Board.new('O', 'X')
             board = game.board
             rand = rand(0..6)
@@ -52,7 +52,7 @@ describe Board do
             expect(game.vertical_win?).to eql('O')
         end
 
-        it "returns `winner` if 4 player pieces connect vertically (OXOOOO)" do
+        it "returns O if 4 player pieces connect vertically (OXOOOO)" do
             game = Board.new('O', 'X')
             board = game.board
             rand = rand(0..6)
@@ -143,8 +143,6 @@ describe Board do
                     y += 1
                     x += 1
                 end
-
-                pp board
                 
                 expect(game.diagonal_win?).to eql('X')
 
@@ -181,11 +179,77 @@ describe Board do
                     y -= 1
                     x += 1
                 end
-
-                pp board
-                pp ""
                 
-                # expect(game.diagonal_win?).to eql('O')
+                expect(game.diagonal_win?).to eql('O')
+
+                # reset board
+
+                for y in 0..board.length-1
+                    for x in 0..board[y].length-1
+                        board[y][x] = " "
+                    end
+                end
+            end
+        end
+
+        it "returns X if 4 player pieces connect diagonally from bottom left to top right (XXXX)" do
+            game = Board.new('O', 'X')
+            board = game.board
+
+            start_points = [
+                [5,0], [4,0], [3,0],
+                [5,1], [4,1], [3,1],
+                [5,2], [4,2], [3,2],
+                [5,3], [4,3], [3,3]
+            ]
+
+            for arr in start_points
+                y, x = arr
+                max_y = y - 4
+                max_x = x + 4
+
+                # fill coordinates in board from starting point to end
+
+                until y == max_y && x == max_x
+                    board[y][x] = 'X'
+                    y -= 1
+                    x += 1
+                end
+                
+                expect(game.diagonal_win?).to eql('X')
+
+                # reset board
+
+                for y in 0..board.length-1
+                    for x in 0..board[y].length-1
+                        board[y][x] = " "
+                    end
+                end
+            end
+        end
+
+        it "returns false if no 4 player pieces connect diagonally" do
+            game = Board.new('O', 'X')
+            board = game.board
+
+            start_points = [
+                [2,0], [2,1], [2,2], [2,3]
+            ]
+
+            for arr in start_points
+                y, x = arr
+                max_y = y - 4
+                max_x = x + 4
+
+                # fill coordinates in board from starting point to end
+
+                until y == max_y && x == max_x
+                    board[y][x] = 'X'
+                    y -= 1
+                    x += 1
+                end
+                
+                expect(game.diagonal_win?).to eql(false)
 
                 # reset board
 
