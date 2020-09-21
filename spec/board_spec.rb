@@ -261,4 +261,106 @@ describe Board do
             end
         end
     end
+
+    describe "#drop_piece?" do
+        it "returns false if the inputted number is < 1 and > 7" do
+            game = Board.new('O', 'X')
+
+            expect(game.drop_piece?(-1, 'O')).to eql(false)
+            expect(game.drop_piece?(0, 'X')).to eql(false)
+            expect(game.drop_piece?(8, 'O')).to eql(false)
+            expect(game.drop_piece?(10, 'X')).to eql(false)
+        end
+
+        # several tests below use the same subject
+        subject { Board.new('O', 'X') }
+
+        it "returns true since the position is available, player piece (O) is on the bottom of the board" do
+            expect(subject.drop_piece?(3, 'O')).to eql(true)
+            expect(subject.board[5][2]).to eql('O')
+        end
+
+        it "returns true since the position is available, player piece (X) is on top of another piece" do
+            expect(subject.drop_piece?(3, 'O')).to eql(true)
+            expect(subject.drop_piece?(3, 'X')).to eql(true)
+
+            expect(subject.board[5][2]).to eql('O')
+            expect(subject.board[4][2]).to eql('X')
+        end
+
+        it "pieces are where they're supposed to be on the board" do
+            expect(subject.drop_piece?(3, 'O')).to eql(true)
+            expect(subject.drop_piece?(3, 'X')).to eql(true)
+            expect(subject.drop_piece?(4, 'O')).to eql(true)
+            expect(subject.drop_piece?(5, 'X')).to eql(true)
+            expect(subject.drop_piece?(2, 'O')).to eql(true)
+            expect(subject.drop_piece?(1, 'X')).to eql(true)
+            expect(subject.drop_piece?(4, 'O')).to eql(true)
+            expect(subject.drop_piece?(2, 'X')).to eql(true)
+            expect(subject.drop_piece?(4, 'O')).to eql(true)
+            expect(subject.drop_piece?(4, 'X')).to eql(true)
+            expect(subject.drop_piece?(3, 'O')).to eql(true)
+            expect(subject.drop_piece?(5, 'X')).to eql(true)
+            expect(subject.drop_piece?(2, 'O')).to eql(true)
+            expect(subject.drop_piece?(5, 'X')).to eql(true)
+            expect(subject.drop_piece?(5, 'O')).to eql(true)
+            expect(subject.drop_piece?(6, 'X')).to eql(true)
+            expect(subject.drop_piece?(1, 'O')).to eql(true)
+            expect(subject.drop_piece?(1, 'X')).to eql(true)
+            expect(subject.drop_piece?(7, 'O')).to eql(true)
+            expect(subject.drop_piece?(6, 'X')).to eql(true)
+            expect(subject.drop_piece?(2, 'O')).to eql(true)
+            expect(subject.drop_piece?(6, 'X')).to eql(true)
+            expect(subject.drop_piece?(6, 'O')).to eql(true)
+            expect(subject.drop_piece?(6, 'X')).to eql(true)
+            expect(subject.drop_piece?(1, 'O')).to eql(true)
+            expect(subject.drop_piece?(1, 'X')).to eql(true)
+            expect(subject.drop_piece?(2, 'O')).to eql(true)
+            expect(subject.drop_piece?(2, 'X')).to eql(true)
+
+            expect(subject.board[5][2]).to eql('O')
+            expect(subject.board[4][2]).to eql('X')
+            expect(subject.board[5][3]).to eql('O')
+            expect(subject.board[5][4]).to eql('X')
+            expect(subject.board[5][1]).to eql('O')
+            expect(subject.board[5][0]).to eql('X')
+            expect(subject.board[4][3]).to eql('O')
+            expect(subject.board[4][1]).to eql('X')
+            expect(subject.board[3][3]).to eql('O')
+            expect(subject.board[2][3]).to eql('X')
+            expect(subject.board[3][2]).to eql('O')
+            expect(subject.board[4][4]).to eql('X')
+            expect(subject.board[3][1]).to eql('O')
+            expect(subject.board[3][4]).to eql('X')
+            expect(subject.board[2][4]).to eql('O')
+            expect(subject.board[5][5]).to eql('X')
+            expect(subject.board[4][0]).to eql('O')
+            expect(subject.board[3][0]).to eql('X')
+            expect(subject.board[5][6]).to eql('O')
+            expect(subject.board[5][4]).to eql('X')
+            expect(subject.board[2][1]).to eql('O')
+            expect(subject.board[3][5]).to eql('X')
+            expect(subject.board[5][2]).to eql('O')
+            expect(subject.board[1][5]).to eql('X')
+            expect(subject.board[2][0]).to eql('O')
+            expect(subject.board[1][0]).to eql('X')
+            expect(subject.board[1][1]).to eql('O')
+            expect(subject.board[0][1]).to eql('X')
+        end
+
+        it "returns false when a move is invalid" do
+            subject.board = [
+                [" ", "X", " ", " ", " ", " ", " "],
+                ["X", "O", " ", " ", " ", "X", " "],
+                ["O", "O", " ", "X", "O", "O", " "],
+                ["X", "O", "O", "O", "X", "X", " "],
+                ["O", "X", "X", "O", "X", "X", " "],
+                ["X", "O", "O", "O", "X", "X", "O"]
+            ]
+
+            expect(subject.drop_piece?(2, 'O')).to eql(false)
+
+            pp subject.board
+        end
+    end
 end

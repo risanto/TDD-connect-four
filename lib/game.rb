@@ -21,6 +21,9 @@ class Game
             puts line
         end
     end
+
+    # def play
+        
 end
 
 game = Game.new

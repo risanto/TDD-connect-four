@@ -135,4 +135,30 @@ class Board
 
         false
     end
+
+    def drop_piece?(n, piece)
+        return false if n < 1 || n > 7
+
+        column = []
+        
+        y = 5
+        x = 6
+
+        for i in 0..@board.length-1
+            break if @board[i][n-1] != " "
+
+            y = i
+            x = n-1
+
+            column << @board[i][n-1]
+        end
+
+        pp y, x
+
+        @board[y][x] = piece
+
+        pp @board
+
+        return true
+    end
 end
