@@ -1,5 +1,5 @@
 class Board
-    attr_accessor :board
+    attr_accessor :board, :player1, :player2, :last_player
 
     def initialize(player1, player2)
         @board = Array.new(6) {Array.new(7, ' ')}
@@ -136,13 +136,19 @@ class Board
         false
     end
 
+    def theres_winner?
+        return true if horizontal_win? != false || vertical_win? != false || diagonal_win? != false
+
+        return false
+    end
+
     def drop_piece?(n, piece)
         return false if n < 1 || n > 7
 
         column = []
         
-        y = 5
-        x = 6
+        y = -1
+        x = n
 
         for i in 0..@board.length-1
             break if @board[i][n-1] != " "
@@ -153,11 +159,9 @@ class Board
             column << @board[i][n-1]
         end
 
-        pp y, x
+        return false if y == -1
 
         @board[y][x] = piece
-
-        pp @board
 
         return true
     end
