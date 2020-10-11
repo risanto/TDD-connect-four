@@ -1,4 +1,4 @@
-# TDD Connect Four
+# Connect Four
 
 A Connect Four terminal game made in Ruby utilising a test-driven development. Try it on [repl.it](https://repl.it/@Risanto/connect-four).
 
